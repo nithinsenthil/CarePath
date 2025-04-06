@@ -261,28 +261,39 @@
                 }
 
                 // Display emergency guidance if available
-                if (data.emergency_guidance) {
+                if (data.emergency_guidance && 
+                    (data.emergency_guidance.emergency_steps.length > 0 || 
+                     data.emergency_guidance.do_not_do.length > 0 || 
+                     data.emergency_guidance.additional_notes)) {
+                    emergencyGuidanceDiv.style.display = 'block';
                     emergencyGuidanceDiv.innerHTML = `
                         <h3>Emergency Guidance</h3>
-                        <div class="emergency-steps">
-                            <h4>What to do:</h4>
-                            <ol>
-                                ${data.emergency_guidance.emergency_steps.map(step => `
-                                    <li>${step}</li>
-                                `).join('')}
-                            </ol>
-                        </div>
-                        <div class="do-not-do">
-                            <h4>What NOT to do:</h4>
-                            <ul>
-                                ${data.emergency_guidance.do_not_do.map(item => `
-                                    <li>${item}</li>
-                                `).join('')}
-                            </ul>
-                        </div>
-                        <p>${data.emergency_guidance.additional_notes}</p>
+                        ${data.emergency_guidance.emergency_steps.length > 0 ? `
+                            <div class="emergency-steps">
+                                <h4>What to do:</h4>
+                                <ol>
+                                    ${data.emergency_guidance.emergency_steps.map(step => `
+                                        <li>${step}</li>
+                                    `).join('')}
+                                </ol>
+                            </div>
+                        ` : ''}
+                        ${data.emergency_guidance.do_not_do.length > 0 ? `
+                            <div class="do-not-do">
+                                <h4>What NOT to do:</h4>
+                                <ul>
+                                    ${data.emergency_guidance.do_not_do.map(item => `
+                                        <li>${item}</li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        ${data.emergency_guidance.additional_notes ? `
+                            <p>${data.emergency_guidance.additional_notes}</p>
+                        ` : ''}
                     `;
                 } else {
+                    emergencyGuidanceDiv.style.display = 'none';
                     emergencyGuidanceDiv.innerHTML = '';
                 }
                 
