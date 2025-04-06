@@ -34,10 +34,11 @@ def get_nearby_facilities(latitude, longitude, facility_type):
     }
     
     try:
+        print("Fetching facilities...")
         response = requests.get(base_url, params=params)
         response.raise_for_status()
         data = response.json()
-        
+        print("Facilities fetched:", data)
         if data["status"] == "OK":
             facilities = []
             for place in data["results"][:5]:  # Get top 5 results
@@ -169,6 +170,8 @@ def home():
 
 @app.route('/analyze', methods=['POST'])
 def analyze_symptoms():
+    print("Analyzing symptoms...")
+
     data = request.json
     symptoms = data.get('symptoms', '').lower()
     latitude = data.get('latitude')
@@ -184,7 +187,9 @@ def analyze_symptoms():
     
     if "error" in analysis:
         return jsonify(analysis)
-    
+    print("Location data:", latitude, longitude)
+    print("Urgency level:", analysis.get("overall_urgency"))
+    print("Will search facilities:", bool(latitude and longitude and analysis["overall_urgency"] in ["high", "medium"]))
     # If location is provided and urgency is high/medium, get nearby facilities
     if latitude and longitude and analysis["overall_urgency"] in ["high", "medium"]:
         facility_type = "Emergency Room" if analysis["overall_urgency"] == "high" else "Urgent Care"
@@ -197,6 +202,7 @@ def analyze_symptoms():
         if emergency_guidance:
             analysis["emergency_guidance"] = emergency_guidance
     
+    print("Analysis complete")
     return jsonify(analysis)
 
 if __name__ == '__main__':
