@@ -3,13 +3,103 @@ import os
 from dotenv import load_dotenv
 import requests
 import json
+from datetime import datetime
 
 app = Flask(__name__)
 load_dotenv()
 
-# Claude AI configuration
+# API configurations
 CLAUDE_API_URL = "https://api.anthropic.com/v1/messages"
 CLAUDE_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
+
+def get_nearby_facilities(latitude, longitude, facility_type):
+    """Get nearby medical facilities using Google Places API."""
+    base_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+    
+    # Determine the type of facility to search for
+    if facility_type == "Emergency Room":
+        types = "hospital"
+        keyword = "emergency"
+    else:  # Urgent Care or Primary Care
+        types = "doctor"
+        keyword = "urgent care"
+    
+    params = {
+        "location": f"{latitude},{longitude}",
+        "radius": "5000",  # 5km radius
+        "type": types,
+        "keyword": keyword,
+        "key": GOOGLE_MAPS_API_KEY
+    }
+    
+    try:
+        response = requests.get(base_url, params=params)
+        response.raise_for_status()
+        data = response.json()
+        
+        if data["status"] == "OK":
+            facilities = []
+            for place in data["results"][:5]:  # Get top 5 results
+                facilities.append({
+                    "name": place["name"],
+                    "address": place.get("vicinity", "Address not available"),
+                    "rating": place.get("rating", "No rating available"),
+                    "place_id": place["place_id"]
+                })
+            return facilities
+        return []
+    except Exception as e:
+        print(f"Error fetching facilities: {str(e)}")
+        return []
+
+def get_emergency_guidance(symptoms):
+    """Get emergency guidance for high-urgency situations."""
+    prompt = f"""You are an emergency medical advisor. For the following symptoms, provide ONLY a JSON response with emergency guidance steps:
+
+Symptoms: {symptoms}
+
+Provide your response in EXACTLY this JSON format, with no other text:
+{{
+    "emergency_steps": [
+        "Step 1 description",
+        "Step 2 description",
+        ...
+    ],
+    "do_not_do": [
+        "What not to do 1",
+        "What not to do 2",
+        ...
+    ],
+    "additional_notes": "Any additional important information"
+}}"""
+
+    headers = {
+        "x-api-key": CLAUDE_API_KEY,
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json"
+    }
+
+    data = {
+        "model": "claude-3-opus-20240229",
+        "max_tokens": 1000,
+        "messages": [
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    }
+
+    try:
+        response = requests.post(CLAUDE_API_URL, headers=headers, json=data)
+        response.raise_for_status()
+        claude_response = response.json()
+        content = claude_response['content'][0]['text']
+        return json.loads(content)
+    except Exception as e:
+        print(f"Error getting emergency guidance: {str(e)}")
+        return None
 
 def query_claude(symptoms):
     """Query Claude AI to analyze symptoms and provide recommendations."""
@@ -61,27 +151,12 @@ Remember: Respond with ONLY the JSON object, no other text."""
         response = requests.post(CLAUDE_API_URL, headers=headers, json=data)
         response.raise_for_status()
         claude_response = response.json()
-        
-        # Extract the content from Claude's response
         content = claude_response['content'][0]['text']
         
         print("Symptoms: ", symptoms)
         print("Content: ", content)
 
-        # Parse the JSON response
-        try:
-            return json.loads(content)
-        except json.JSONDecodeError:
-            # Fallback to basic analysis if JSON parsing fails
-            return {
-                "matched_symptoms": [{
-                    "symptom": "General Symptoms",
-                    "urgency": "medium",
-                    "recommendation": "Urgent Care",
-                    "description": "Please consult with a healthcare professional for proper evaluation."
-                }],
-                "overall_urgency": "medium"
-            }
+        return json.loads(content)
     except Exception as e:
         print(f"Error querying Claude: {str(e)}")
         return {
@@ -96,17 +171,31 @@ def home():
 def analyze_symptoms():
     data = request.json
     symptoms = data.get('symptoms', '').lower()
+    latitude = data.get('latitude')
+    longitude = data.get('longitude')
     
     if not symptoms.strip():
         return jsonify({
             "error": "Please describe your symptoms."
         })
     
-    # Query Claude AI for analysis
+    # Get symptom analysis from Claude
     analysis = query_claude(symptoms)
     
     if "error" in analysis:
         return jsonify(analysis)
+    
+    # If location is provided and urgency is high/medium, get nearby facilities
+    if latitude and longitude and analysis["overall_urgency"] in ["high", "medium"]:
+        facility_type = "Emergency Room" if analysis["overall_urgency"] == "high" else "Urgent Care"
+        facilities = get_nearby_facilities(latitude, longitude, facility_type)
+        analysis["nearby_facilities"] = facilities
+    
+    # If urgency is high, get emergency guidance
+    if analysis["overall_urgency"] == "high":
+        emergency_guidance = get_emergency_guidance(symptoms)
+        if emergency_guidance:
+            analysis["emergency_guidance"] = emergency_guidance
     
     return jsonify(analysis)
 
