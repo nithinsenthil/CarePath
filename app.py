@@ -23,6 +23,52 @@ GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 # print("GOOGLE_MAPS_API_KEY exists:", bool(GOOGLE_MAPS_API_KEY))
 # print("GOOGLE_MAPS_API_KEY value:", GOOGLE_MAPS_API_KEY)
 
+def get_travel_info(origin_lat, origin_lng, destination_lat, destination_lng):
+    """Get travel time and distance to destination using Google Maps Distance Matrix API."""
+    if not GOOGLE_MAPS_API_KEY:
+        print("Warning: Google Maps API key not configured")
+        return None
+        
+    base_url = "https://maps.googleapis.com/maps/api/distancematrix/json"
+    
+    params = {
+        "origins": f"{origin_lat},{origin_lng}",
+        "destinations": f"{destination_lat},{destination_lng}",
+        "mode": "driving",
+        "units": "imperial",  # Use miles instead of kilometers
+        "key": GOOGLE_MAPS_API_KEY
+    }
+    
+    try:
+        print(f"Fetching travel info from {origin_lat},{origin_lng} to {destination_lat},{destination_lng}")
+        response = requests.get(base_url, params=params)
+        response.raise_for_status()
+        data = response.json()
+        print("Travel info response:", data)
+        
+        if data["status"] == "OK" and data["rows"][0]["elements"][0]["status"] == "OK":
+            element = data["rows"][0]["elements"][0]
+            duration = element["duration"]
+            distance = element["distance"]
+            travel_info = {
+                "duration": {
+                    "text": duration["text"],
+                    "value": duration["value"]  # duration in seconds
+                },
+                "distance": {
+                    "text": distance["text"],
+                    "value": distance["value"]  # distance in meters
+                }
+            }
+            print("Travel info calculated:", travel_info)
+            return travel_info
+        else:
+            print(f"Error in travel info response: {data.get('status')}, {data.get('rows', [{}])[0].get('elements', [{}])[0].get('status')}")
+            return None
+    except Exception as e:
+        print(f"Error getting travel info: {str(e)}")
+        return None
+
 def get_nearby_facilities(latitude, longitude, facility_type):
     """Get nearby medical facilities using Google Places API."""
     if not GOOGLE_MAPS_API_KEY or GOOGLE_MAPS_API_KEY == "your_google_maps_api_key_here":
@@ -61,20 +107,32 @@ def get_nearby_facilities(latitude, longitude, facility_type):
                 details_url = f"https://maps.googleapis.com/maps/api/place/details/json"
                 details_params = {
                     "place_id": place["place_id"],
-                    "fields": "url",
+                    "fields": "url,geometry",
                     "key": GOOGLE_MAPS_API_KEY
                 }
                 details_response = requests.get(details_url, params=details_params)
                 details_data = details_response.json()
                 
                 google_maps_url = details_data.get("result", {}).get("url", "")
+                location = details_data.get("result", {}).get("geometry", {}).get("location", {})
+                
+                # Calculate travel info
+                travel_info = None
+                if location:
+                    travel_info = get_travel_info(
+                        latitude,
+                        longitude,
+                        location.get("lat"),
+                        location.get("lng")
+                    )
                 
                 facilities.append({
                     "name": place["name"],
                     "address": place.get("vicinity", "Address not available"),
                     "rating": place.get("rating", "No rating available"),
                     "place_id": place["place_id"],
-                    "maps_url": google_maps_url
+                    "maps_url": google_maps_url,
+                    "travel_info": travel_info
                 })
             return facilities
         elif data["status"] == "REQUEST_DENIED":

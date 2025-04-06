@@ -11,6 +11,9 @@
             --danger-color: #dc2626;
             --warning-color: #f59e0b;
             --success-color: #10b981;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
         }
         
         * {
@@ -21,26 +24,66 @@
         }
         
         body {
-            background-color: #f3f4f6;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
             color: #1f2937;
             line-height: 1.5;
+            padding: 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            opacity: 0.1;
+            z-index: -1;
         }
         
         .container {
             max-width: 800px;
             margin: 0 auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
             padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: -1;
         }
         
         header {
             text-align: center;
             margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 0.75rem;
+            border: 1px solid var(--glass-border);
         }
         
         h1 {
             font-size: 2.5rem;
             color: var(--primary-color);
             margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .description {
@@ -49,21 +92,27 @@
         }
         
         .input-section {
-            background: white;
+            background: var(--glass-bg);
             padding: 2rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-radius: 0.75rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
             margin-bottom: 2rem;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
         
         textarea {
             width: 100%;
             padding: 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.375rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 0.5rem;
             margin-bottom: 1rem;
             min-height: 120px;
             resize: vertical;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
         
         button {
@@ -71,22 +120,28 @@
             color: white;
             padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 0.375rem;
+            border-radius: 0.5rem;
             cursor: pointer;
             font-weight: 500;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
         button:hover {
             background-color: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
         
         .results {
             display: none;
-            background: white;
+            background: var(--glass-bg);
             padding: 2rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-radius: 0.75rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
         
         .urgency-high {
@@ -103,14 +158,11 @@
         
         .symptom-item {
             margin-bottom: 1rem;
-            padding: 1rem;
+            padding: 1.5rem;
             border-left: 4px solid var(--primary-color);
-            background-color: #f8fafc;
-        }
-        
-        .error {
-            color: var(--danger-color);
-            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 0.5rem;
+            border: 1px solid var(--glass-border);
         }
 
         .facilities-list {
@@ -118,44 +170,147 @@
         }
 
         .facility-item {
-            padding: 1rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.375rem;
-            margin-bottom: 0.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .maps-button {
-            display: inline-block;
-            background-color: #f3f4f6;
-            color: var(--primary-color);
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--primary-color);
-            border-radius: 0.375rem;
-            text-decoration: none;
-            font-weight: 500;
-            margin-top: 0.5rem;
-            transition: all 0.2s;
+        .facility-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), rgba(37, 99, 235, 0.2));
+            border-radius: 4px 4px 0 0;
         }
 
-        .maps-button:hover {
-            background-color: var(--primary-color);
-            color: white;
+        .facility-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         }
 
         .facility-info {
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .facility-info h4 {
+            color: var(--primary-color);
             margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .facility-info p {
+            color: #4b5563;
+            margin-bottom: 0.25rem;
+        }
+
+        .rating {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(37, 99, 235, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .rating::before {
+            content: '★';
+            margin-right: 0.25rem;
+            color: #f59e0b;
+        }
+
+        .travel-info {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .travel-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .travel-badge.time {
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .travel-badge.distance {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .travel-badge::before {
+            margin-right: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .travel-badge.time::before {
+            content: '⏱️';
+        }
+
+        .travel-badge.distance::before {
+            content: '📍';
         }
 
         .facility-actions {
             display: flex;
             justify-content: flex-end;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .maps-button {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary-color);
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            transition: all 0.2s;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .maps-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
         }
 
         .emergency-guidance {
             margin-top: 1rem;
-            padding: 1rem;
-            background-color: #fee2e2;
-            border-radius: 0.375rem;
+            padding: 1.5rem;
+            background: rgba(254, 226, 226, 0.8);
+            border-radius: 0.5rem;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
 
         .emergency-steps {
@@ -174,13 +329,17 @@
         .location-error {
             color: var(--warning-color);
             margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 0.5rem;
+            border: 1px solid var(--glass-border);
         }
 
         .loading-spinner {
             display: none;
             width: 20px;
             height: 20px;
-            border: 3px solid #f3f3f3;
+            border: 3px solid rgba(255, 255, 255, 0.3);
             border-top: 3px solid var(--primary-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -201,6 +360,8 @@
         button:disabled {
             background-color: #93c5fd;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         .loading-text {
@@ -209,6 +370,10 @@
             color: var(--primary-color);
             margin-top: 1rem;
             font-weight: 500;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 0.5rem;
+            border: 1px solid var(--glass-border);
         }
     </style>
 </head>
@@ -333,24 +498,34 @@
 
                 // Display nearby facilities if available
                 if (data.nearby_facilities && data.nearby_facilities.length > 0) {
+                    console.log("Facilities data:", data.nearby_facilities);
                     facilitiesDiv.innerHTML = `
                         <h3>Nearby ${data.overall_urgency === 'high' ? 'Emergency Rooms' : 'Urgent Care Facilities'}</h3>
-                        ${data.nearby_facilities.map(facility => `
-                            <div class="facility-item">
-                                <div class="facility-info">
-                                    <h4>${facility.name}</h4>
-                                    <p>${facility.address}</p>
-                                    <p>Rating: ${facility.rating}</p>
+                        ${data.nearby_facilities.map(facility => {
+                            console.log("Facility travel info:", facility.travel_info);
+                            return `
+                                <div class="facility-item">
+                                    <div class="facility-info">
+                                        <h4>${facility.name}</h4>
+                                        <p>${facility.address}</p>
+                                        <div class="rating">${facility.rating}</div>
+                                        ${facility.travel_info ? `
+                                            <div class="travel-info">
+                                                <span class="travel-badge time">${facility.travel_info.duration.text}</span>
+                                                <span class="travel-badge distance">${facility.travel_info.distance.text}</span>
+                                            </div>
+                                        ` : '<div class="travel-info"><span class="travel-badge">Distance information unavailable</span></div>'}
+                                    </div>
+                                    <div class="facility-actions">
+                                        ${facility.maps_url ? `
+                                            <a href="${facility.maps_url}" target="_blank" class="maps-button">
+                                                View on Google Maps
+                                            </a>
+                                        ` : ''}
+                                    </div>
                                 </div>
-                                <div class="facility-actions">
-                                    ${facility.maps_url ? `
-                                        <a href="${facility.maps_url}" target="_blank" class="maps-button">
-                                            View on Google Maps
-                                        </a>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        `).join('')}
+                            `;
+                        }).join('')}
                     `;
                 } else {
                     facilitiesDiv.innerHTML = '';
