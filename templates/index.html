@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symptom-to-Care Navigator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --danger-color: #dc2626;
+            --warning-color: #f59e0b;
+            --success-color: #10b981;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .description {
+            color: #4b5563;
+            margin-bottom: 2rem;
+        }
+        
+        .input-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #1d4ed8;
+        }
+        
+        .results {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .urgency-high {
+            color: var(--danger-color);
+        }
+        
+        .urgency-medium {
+            color: var(--warning-color);
+        }
+        
+        .urgency-low {
+            color: var(--success-color);
+        }
+        
+        .symptom-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-left: 4px solid var(--primary-color);
+            background-color: #f8fafc;
+        }
+        
+        .error {
+            color: var(--danger-color);
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Symptom-to-Care Navigator</h1>
+            <p class="description">Describe your symptoms in plain English and get recommendations for appropriate medical care.</p>
+        </header>
+        
+        <div class="input-section">
+            <textarea id="symptoms" placeholder="Describe your symptoms here... For example: 'I have a fever and headache'"></textarea>
+            <button onclick="analyzeSymptoms()">Analyze Symptoms</button>
+        </div>
+        
+        <div id="results" class="results">
+            <h2>Analysis Results</h2>
+            <div id="urgency" class="urgency"></div>
+            <div id="symptoms-list"></div>
+        </div>
+    </div>
+
+    <script>
+        async function analyzeSymptoms() {
+            const symptoms = document.getElementById('symptoms').value;
+            const resultsDiv = document.getElementById('results');
+            const symptomsList = document.getElementById('symptoms-list');
+            const urgencyDiv = document.getElementById('urgency');
+            
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ symptoms }),
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    symptomsList.innerHTML = `<p class="error">${data.error}</p>`;
+                    resultsDiv.style.display = 'block';
+                    return;
+                }
+                
+                // Display urgency
+                const urgencyClass = `urgency-${data.overall_urgency}`;
+                urgencyDiv.innerHTML = `<h3 class="${urgencyClass}">Urgency Level: ${data.overall_urgency.toUpperCase()}</h3>`;
+                
+                // Display matched symptoms
+                symptomsList.innerHTML = data.matched_symptoms.map(symptom => `
+                    <div class="symptom-item">
+                        <h3>${symptom.symptom}</h3>
+                        <p><strong>Recommendation:</strong> ${symptom.recommendation}</p>
+                        <p>${symptom.description}</p>
+                    </div>
+                `).join('');
+                
+                resultsDiv.style.display = 'block';
+            } catch (error) {
+                symptomsList.innerHTML = `<p class="error">An error occurred. Please try again.</p>`;
+                resultsDiv.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html> 
