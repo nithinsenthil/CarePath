@@ -4,17 +4,29 @@ from dotenv import load_dotenv
 import requests
 import json
 from datetime import datetime
+from pathlib import Path
+
+# Get the absolute path to the .env file
+env_path = Path('.') / '.env'
+print(f"Loading environment from: {env_path.absolute()}")
 
 app = Flask(__name__)
-load_dotenv()
+load_dotenv(env_path)
 
 # API configurations
 CLAUDE_API_URL = "https://api.anthropic.com/v1/messages"
 CLAUDE_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 
+# print("Environment variables:")
+# print("CLAUDE_API_KEY exists:", bool(CLAUDE_API_KEY))
+# print("GOOGLE_MAPS_API_KEY exists:", bool(GOOGLE_MAPS_API_KEY))
+# print("GOOGLE_MAPS_API_KEY value:", GOOGLE_MAPS_API_KEY)
+
 def get_nearby_facilities(latitude, longitude, facility_type):
     """Get nearby medical facilities using Google Places API."""
+    
+    print("Google Maps API Key:", GOOGLE_MAPS_API_KEY)
     base_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
     
     # Determine the type of facility to search for
@@ -39,6 +51,7 @@ def get_nearby_facilities(latitude, longitude, facility_type):
         response.raise_for_status()
         data = response.json()
         print("Facilities fetched:", data)
+        
         if data["status"] == "OK":
             facilities = []
             for place in data["results"][:5]:  # Get top 5 results
@@ -49,7 +62,12 @@ def get_nearby_facilities(latitude, longitude, facility_type):
                     "place_id": place["place_id"]
                 })
             return facilities
-        return []
+        elif data["status"] == "REQUEST_DENIED":
+            print("Error: Google Maps API request denied. Please check your API key configuration.")
+            return []
+        else:
+            print(f"Warning: Google Maps API returned status: {data['status']}")
+            return []
     except Exception as e:
         print(f"Error fetching facilities: {str(e)}")
         return []
