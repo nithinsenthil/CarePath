@@ -124,6 +124,33 @@
             margin-bottom: 0.5rem;
         }
 
+        .maps-button {
+            display: inline-block;
+            background-color: #f3f4f6;
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary-color);
+            border-radius: 0.375rem;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .maps-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .facility-info {
+            margin-bottom: 0.5rem;
+        }
+
+        .facility-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
         .emergency-guidance {
             margin-top: 1rem;
             padding: 1rem;
@@ -148,6 +175,41 @@
             color: var(--warning-color);
             margin-top: 1rem;
         }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .button-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button:disabled {
+            background-color: #93c5fd;
+            cursor: not-allowed;
+        }
+
+        .loading-text {
+            display: none;
+            text-align: center;
+            color: var(--primary-color);
+            margin-top: 1rem;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -159,7 +221,13 @@
         
         <div class="input-section">
             <textarea id="symptoms" placeholder="Describe your symptoms here... For example: 'I have a fever and headache'"></textarea>
-            <button onclick="analyzeSymptoms()">Analyze Symptoms</button>
+            <button onclick="analyzeSymptoms()" id="analyze-button">
+                <div class="button-content">
+                    <div class="loading-spinner" id="loading-spinner"></div>
+                    <span>Analyze Symptoms</span>
+                </div>
+            </button>
+            <p id="loading-text" class="loading-text">Analyzing symptoms and finding nearby facilities...</p>
             <p id="location-error" class="location-error" style="display: none;">
                 Location access is required for finding nearby medical facilities. Please enable location services.
             </p>
@@ -169,8 +237,8 @@
             <h2>Analysis Results</h2>
             <div id="urgency" class="urgency"></div>
             <div id="symptoms-list"></div>
-            <div id="emergency-guidance" class="emergency-guidance"></div>
             <div id="facilities" class="facilities-list"></div>
+            <div id="emergency-guidance" class="emergency-guidance"></div>
         </div>
     </div>
 
@@ -196,6 +264,22 @@
             }
         };
 
+        function setLoadingState(isLoading) {
+            const button = document.getElementById('analyze-button');
+            const spinner = document.getElementById('loading-spinner');
+            const loadingText = document.getElementById('loading-text');
+            const resultsDiv = document.getElementById('results');
+            
+            button.disabled = isLoading;
+            spinner.style.display = isLoading ? 'block' : 'none';
+            loadingText.style.display = isLoading ? 'block' : 'none';
+            
+            // Only hide results when starting to load, don't hide when loading is complete
+            if (isLoading) {
+                resultsDiv.style.display = 'none';
+            }
+        }
+
         async function analyzeSymptoms() {
             const symptoms = document.getElementById('symptoms').value;
             const resultsDiv = document.getElementById('results');
@@ -203,6 +287,9 @@
             const urgencyDiv = document.getElementById('urgency');
             const facilitiesDiv = document.getElementById('facilities');
             const emergencyGuidanceDiv = document.getElementById('emergency-guidance');
+            
+            // Set loading state
+            setLoadingState(true);
             
             try {
                 const requestData = {
@@ -250,9 +337,18 @@
                         <h3>Nearby ${data.overall_urgency === 'high' ? 'Emergency Rooms' : 'Urgent Care Facilities'}</h3>
                         ${data.nearby_facilities.map(facility => `
                             <div class="facility-item">
-                                <h4>${facility.name}</h4>
-                                <p>${facility.address}</p>
-                                <p>Rating: ${facility.rating}</p>
+                                <div class="facility-info">
+                                    <h4>${facility.name}</h4>
+                                    <p>${facility.address}</p>
+                                    <p>Rating: ${facility.rating}</p>
+                                </div>
+                                <div class="facility-actions">
+                                    ${facility.maps_url ? `
+                                        <a href="${facility.maps_url}" target="_blank" class="maps-button">
+                                            View on Google Maps
+                                        </a>
+                                    ` : ''}
+                                </div>
                             </div>
                         `).join('')}
                     `;
@@ -297,10 +393,14 @@
                     emergencyGuidanceDiv.innerHTML = '';
                 }
                 
+                // Show results after all content is loaded
                 resultsDiv.style.display = 'block';
             } catch (error) {
                 symptomsList.innerHTML = `<p class="error">An error occurred. Please try again.</p>`;
                 resultsDiv.style.display = 'block';
+            } finally {
+                // Reset loading state
+                setLoadingState(false);
             }
         }
     </script>

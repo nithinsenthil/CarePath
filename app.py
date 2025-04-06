@@ -25,8 +25,10 @@ GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 
 def get_nearby_facilities(latitude, longitude, facility_type):
     """Get nearby medical facilities using Google Places API."""
-    
-    print("Google Maps API Key:", GOOGLE_MAPS_API_KEY)
+    if not GOOGLE_MAPS_API_KEY or GOOGLE_MAPS_API_KEY == "your_google_maps_api_key_here":
+        print("Warning: Google Maps API key not properly configured")
+        return []
+        
     base_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
     
     # Determine the type of facility to search for
@@ -55,11 +57,24 @@ def get_nearby_facilities(latitude, longitude, facility_type):
         if data["status"] == "OK":
             facilities = []
             for place in data["results"][:5]:  # Get top 5 results
+                # Get place details to get the Google Maps URL
+                details_url = f"https://maps.googleapis.com/maps/api/place/details/json"
+                details_params = {
+                    "place_id": place["place_id"],
+                    "fields": "url",
+                    "key": GOOGLE_MAPS_API_KEY
+                }
+                details_response = requests.get(details_url, params=details_params)
+                details_data = details_response.json()
+                
+                google_maps_url = details_data.get("result", {}).get("url", "")
+                
                 facilities.append({
                     "name": place["name"],
                     "address": place.get("vicinity", "Address not available"),
                     "rating": place.get("rating", "No rating available"),
-                    "place_id": place["place_id"]
+                    "place_id": place["place_id"],
+                    "maps_url": google_maps_url
                 })
             return facilities
         elif data["status"] == "REQUEST_DENIED":
