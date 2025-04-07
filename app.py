@@ -134,6 +134,7 @@ def get_nearby_facilities(latitude, longitude, facility_type):
                     "maps_url": google_maps_url,
                     "travel_info": travel_info
                 })
+                facilities = sorted(facilities, key=lambda x: x["travel_info"]["duration"]["value"] if x["travel_info"]["duration"] is not None else float('inf'))
             return facilities
         elif data["status"] == "REQUEST_DENIED":
             print("Error: Google Maps API request denied. Please check your API key configuration.")
