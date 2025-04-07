@@ -1,11 +1,113 @@
 :root {
-    --primary-color: #2563eb;
-    --danger-color: #dc2626;
-    --warning-color: #f59e0b;
-    --success-color: #10b981;
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.3);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    --primary-color: #FFD700;  /* Bright yellow like a ripe banana */
+    --danger-color: #DAA520;   /* Golden brown for warnings */
+    --warning-color: #FFA500;  /* Orange for medium urgency */
+    --success-color: #F0E68C;  /* Light yellow for low urgency */
+    --glass-bg: rgba(255, 255, 240, 0.7);  /* Light yellow tinted glass */
+    --glass-border: rgba(218, 165, 32, 0.3);  /* Golden border */
+    --glass-shadow: 0 8px 32px 0 rgba(218, 165, 32, 0.15);  /* Golden shadow */
+}
+
+/* Banana SVG Assets */
+.banana-decoration {
+    position: absolute;
+    width: 150px;  /* Increased size */
+    height: 150px;
+    pointer-events: none;
+    z-index: 2;  /* Bring to front */
+    opacity: 0.9;  /* More visible */
+    animation: enhancedFloating 8s ease-in-out infinite, bananaGlow 3s ease-in-out infinite;
+}
+
+@keyframes enhancedFloating {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    25% { transform: translate(10px, -15px) rotate(15deg) scale(1.1); }
+    50% { transform: translate(0, -25px) rotate(0deg) scale(1); }
+    75% { transform: translate(-10px, -15px) rotate(-15deg) scale(1.1); }
+    100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+}
+
+.banana-decoration::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(255, 215, 0, 0.5) 0%, transparent 70%);
+    animation: bananaSparkle 2s ease-in-out infinite;
+    z-index: -1;
+}
+
+.banana-decoration.top-right {
+    top: -20px;
+    right: -20px;
+    transform: rotate(30deg);
+}
+
+.banana-decoration.bottom-left {
+    bottom: -20px;
+    left: -20px;
+    transform: rotate(-30deg);
+    animation-delay: -3s;
+}
+
+.banana-decoration.top-left {
+    top: -20px;
+    left: -20px;
+    transform: rotate(-45deg);
+    animation-delay: -2s;
+}
+
+.banana-decoration.bottom-right {
+    bottom: -20px;
+    right: -20px;
+    transform: rotate(45deg);
+    animation-delay: -1s;
+}
+
+.banana-decoration::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M30,40 C30,20 45,15 60,20 C75,25 80,40 75,60 C70,80 55,85 40,80 C25,75 20,60 30,40Z' fill='%23FFD700'/%3E%3Cpath d='M35,42 C35,25 47,22 60,25 C73,28 77,42 72,58 C67,74 55,77 42,74 C29,71 25,57 35,42Z' fill='%23654321' fill-opacity='0.1'/%3E%3Cpath d='M40,45 C40,35 45,30 55,35 C65,40 65,50 60,60 C55,70 45,70 40,60 C35,50 35,45 40,45Z' fill='white' fill-opacity='0.3'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.banana-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8,10 C8,5 11,4 14,5 C17,6 18,10 17,15 C16,20 13,21 10,20 C7,19 6,15 8,10Z' fill='%23FFD700'/%3E%3Cpath d='M9,11 C9,7 11,6 13,7 C15,8 16,11 15,15 C14,19 12,20 10,19 C8,18 7,15 9,11Z' fill='%23654321' fill-opacity='0.1'/%3E%3Cpath d='M10,12 C10,10 11,9 12,10 C13,11 13,13 12,15 C11,17 10,17 9,15 C8,13 9,12 10,12Z' fill='white' fill-opacity='0.3'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.banana-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Cpath d='M30,40 C30,20 45,15 60,20 C75,25 80,40 75,60 C70,80 55,85 40,80 C25,75 20,60 30,40Z' fill='%23FFD700' fill-opacity='0.15'/%3E%3C/svg%3E");
+    background-size: 100px 100px;
+    background-repeat: repeat;
+    opacity: 0.15;  /* Increased from 0.1 */
+    z-index: -1;
+    animation: floatingBananas 60s linear infinite;
+}
+
+@keyframes floatingBananas {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 100px 100px;
+    }
 }
 
 * {
@@ -17,8 +119,8 @@
 
 body {
     min-height: 100vh;
-    background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
-    color: #1f2937;
+    background: linear-gradient(135deg, #FFF8DC 0%, #FFE4B5 100%);  /* Banana cream gradient */
+    color: #654321;  /* Dark brown text */
     line-height: 1.5;
     padding: 2rem;
     position: relative;
@@ -32,9 +134,28 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M50,20 C60,20 70,30 70,40 C70,50 60,60 50,60 C40,60 30,50 30,40 C30,30 40,20 50,20" fill="rgba(255,215,0,0.1)"/></svg>') repeat;
     opacity: 0.1;
     z-index: -1;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8,10 C8,5 11,4 14,5 C17,6 18,10 17,15 C16,20 13,21 10,20 C7,19 6,15 8,10Z' fill='%23FFD700' fill-opacity='0.2'/%3E%3C/svg%3E");
+    background-size: 30px 30px;
+    animation: rainingBananas 20s linear infinite;
+    z-index: -1;
+}
+
+@keyframes rainingBananas {
+    from { background-position: 0 -100vh; }
+    to { background-position: 100px 100vh; }
 }
 
 .container {
@@ -48,46 +169,143 @@ body::before {
     box-shadow: var(--glass-shadow);
     padding: 2rem;
     position: relative;
-    overflow: hidden;
+    overflow: visible !important;
 }
 
 .container::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 2px dashed #FFD700;
+    border-radius: 1.5rem;
+    animation: rotateBorder 10s linear infinite;
     z-index: -1;
+}
+
+@keyframes rotateBorder {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Add banana decorations to the container */
+.container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Cpath d='M30,40 C30,20 45,15 60,20 C75,25 80,40 75,60 C70,80 55,85 40,80 C25,75 20,60 30,40Z' fill='%23FFD700' fill-opacity='0.05'/%3E%3C/svg%3E");
+    background-size: 50px 50px;
+    background-repeat: repeat;
+    opacity: 0.1;
+    z-index: -1;
+    animation: floatingBananas 120s linear infinite;
+}
+
+/* Add banana icon to the button */
+button::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8,10 C8,5 11,4 14,5 C17,6 18,10 17,15 C16,20 13,21 10,20 C7,19 6,15 8,10Z' fill='%23654321'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* Add banana icon to the rating */
+.rating::before {
+    content: '';
+    display: inline-flex;
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    vertical-align: middle;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8,10 C8,5 11,4 14,5 C17,6 18,10 17,15 C16,20 13,21 10,20 C7,19 6,15 8,10Z' fill='%23FFA500'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(-30deg);
 }
 
 header {
     text-align: center;
     margin-bottom: 1rem;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 240, 0.5);
     border-radius: 0.75rem;
     border: 1px solid var(--glass-border);
 }
 
 h1 {
     font-size: 3rem;
-    color: var(--primary-color);
+    color: #DAA520;  /* Golden brown */
     margin-bottom: 0.25rem;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-weight: 700;
+    position: relative;
+}
+
+h1::before {
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    vertical-align: middle;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8,10 C8,5 11,4 14,5 C17,6 18,10 17,15 C16,20 13,21 10,20 C7,19 6,15 8,10Z' fill='%23FFD700'/%3E%3Cpath d='M9,11 C9,7 11,6 13,7 C15,8 16,11 15,15 C14,19 12,20 10,19 C8,18 7,15 9,11Z' fill='%23654321' fill-opacity='0.1'/%3E%3Cpath d='M10,12 C10,10 11,9 12,10 C13,11 13,13 12,15 C11,17 10,17 9,15 C8,13 9,12 10,12Z' fill='white' fill-opacity='0.3'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(-15deg);
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Cpath d='M10,15 C10,5 20,0 30,5 C40,10 40,20 30,15 C20,10 10,25 10,15Z' fill='%23FFD700' fill-opacity='0.3'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 30px 10px;
+    opacity: 0.5;
+    animation: slideUnderline 10s linear infinite;
+}
+
+@keyframes slideUnderline {
+    from { background-position-x: 0; }
+    to { background-position-x: 60px; }
 }
 
 h2 {
     font-size: 1.5rem;
-    color: #4b5563;
+    color: #8B4513;  /* Saddle brown */
     margin-bottom: 0.5rem;
     font-weight: 500;
 }
 
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Cpath d='M10,15 C10,5 20,0 30,5 C40,10 40,20 30,15 C20,10 10,25 10,15Z' fill='%23FFD700' fill-opacity='0.3'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 30px 10px;
+    opacity: 0.5;
+    animation: slideUnderline 10s linear infinite;
+}
+
 .description {
-    color: #4b5563;
+    color: #8B4513;  /* Saddle brown */
     margin-bottom: 1rem;
 }
 
@@ -100,6 +318,21 @@ h2 {
     margin-bottom: 2rem;
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
+    position: relative;
+    border: none;
+    padding-top: 3rem;
+}
+
+.input-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Cpath d='M10,15 C10,5 20,0 30,5 C40,10 40,20 30,15 C20,10 10,25 10,15Z' fill='%23FFD700' fill-opacity='0.3'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 60px 20px;
 }
 
 textarea {
@@ -110,27 +343,40 @@ textarea {
     margin-bottom: 1rem;
     min-height: 120px;
     resize: vertical;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 240, 0.8);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
+    color: #654321;  /* Dark brown text */
 }
 
 button {
-    background-color: var(--primary-color);
-    color: white;
+    background-color: #FFD700;  /* Bright yellow */
+    color: #654321;  /* Dark brown text */
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;
     font-weight: 500;
     transition: all 0.2s;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(218, 165, 32, 0.2);
 }
 
 button:hover {
-    background-color: #1d4ed8;
+    background-color: #DAA520;  /* Golden brown */
+    color: white;
     transform: translateY(-1px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 8px rgba(218, 165, 32, 0.3);
+}
+
+button:hover::before {
+    content: '🍌';
+    position: absolute;
+    animation: bananaTrail 0.8s ease-out infinite;
+}
+
+@keyframes bananaTrail {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
 }
 
 .results {
@@ -142,27 +388,67 @@ button:hover {
     box-shadow: var(--glass-shadow);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
+    position: relative;
+    border: none;
+    padding-top: 3rem;
+}
+
+.results::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Cpath d='M10,15 C10,5 20,0 30,5 C40,10 40,20 30,15 C20,10 10,25 10,15Z' fill='%23FFD700' fill-opacity='0.3'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 60px 20px;
 }
 
 .urgency-high {
-    color: var(--danger-color);
+    color: #DAA520;  /* Golden brown */
 }
 
 .urgency-medium {
-    color: var(--warning-color);
+    color: #FFA500;  /* Orange */
 }
 
 .urgency-low {
-    color: var(--success-color);
+    color: #F0E68C;  /* Light yellow */
 }
 
 .symptom-item {
     margin-bottom: 1rem;
     padding: 1.5rem;
-    border-left: 4px solid var(--primary-color);
-    background: rgba(255, 255, 255, 0.8);
+    border-left: 4px solid #FFD700;  /* Bright yellow */
+    background: rgba(255, 255, 240, 0.8);
     border-radius: 0.5rem;
     border: 1px solid var(--glass-border);
+    position: relative;
+    padding-right: 2rem;
+}
+
+.symptom-item::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 30px;
+    height: 30px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8,10 C8,5 11,4 14,5 C17,6 18,10 17,15 C16,20 13,21 10,20 C7,19 6,15 8,10Z' fill='%23FFD700'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(45deg);
+}
+
+.symptom-item::after {
+    content: '🍌';
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    font-size: 24px;
+    transform: rotate(45deg);
+    opacity: 0.8;
 }
 
 .facility-item {
@@ -170,10 +456,10 @@ button:hover {
     border: 1px solid var(--glass-border);
     border-radius: 1rem;
     margin-bottom: 1rem;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 240, 0.8);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px rgba(218, 165, 32, 0.1);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -186,13 +472,23 @@ button:hover {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), rgba(37, 99, 235, 0.2));
+    background: linear-gradient(90deg, #FFD700, rgba(218, 165, 32, 0.2));
     border-radius: 4px 4px 0 0;
 }
 
 .facility-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.facility-item::after {
+    content: '🍌';
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    font-size: 24px;
+    transform: rotate(45deg);
+    opacity: 0.8;
 }
 
 .facility-info {
@@ -202,31 +498,25 @@ button:hover {
 }
 
 .facility-info h4 {
-    color: var(--primary-color);
+    color: #DAA520;  /* Golden brown */
     margin-bottom: 0.5rem;
     font-size: 1.25rem;
 }
 
 .facility-info p {
-    color: #4b5563;
+    color: #8B4513;  /* Saddle brown */
     margin-bottom: 0.25rem;
 }
 
 .rating {
     display: inline-flex;
     align-items: center;
-    background: rgba(37, 99, 235, 0.1);
+    background: rgba(255, 215, 0, 0.1);
     padding: 0.25rem 0.75rem;
     border-radius: 1rem;
-    color: var(--primary-color);
+    color: #DAA520;  /* Golden brown */
     font-weight: 500;
     margin-top: 0.5rem;
-}
-
-.rating::before {
-    content: '★';
-    margin-right: 0.25rem;
-    color: #f59e0b;
 }
 
 .travel-info {
@@ -239,8 +529,8 @@ button:hover {
 .travel-badge {
     display: inline-flex;
     align-items: center;
-    background: rgba(37, 99, 235, 0.1);
-    color: var(--primary-color);
+    background: rgba(255, 215, 0, 0.1);
+    color: #DAA520;  /* Golden brown */
     padding: 0.5rem 1rem;
     border-radius: 1rem;
     font-size: 0.875rem;
@@ -249,12 +539,12 @@ button:hover {
 }
 
 .travel-badge.time {
-    background: rgba(37, 99, 235, 0.1);
+    background: rgba(255, 215, 0, 0.1);
 }
 
 .travel-badge.distance {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--success-color);
+    background: rgba(240, 230, 140, 0.1);
+    color: #8B4513;  /* Saddle brown */
 }
 
 .travel-badge::before {
@@ -280,10 +570,10 @@ button:hover {
 
 .maps-button {
     display: inline-block;
-    background-color: rgba(255, 255, 255, 0.8);
-    color: var(--primary-color);
+    background-color: rgba(255, 255, 240, 0.8);
+    color: #DAA520;  /* Golden brown */
     padding: 0.5rem 1rem;
-    border: 1px solid var(--primary-color);
+    border: 1px solid #DAA520;
     border-radius: 0.5rem;
     text-decoration: none;
     font-weight: 500;
@@ -294,7 +584,7 @@ button:hover {
 }
 
 .maps-button:hover {
-    background-color: var(--primary-color);
+    background-color: #DAA520;  /* Golden brown */
     color: white;
     transform: translateY(-1px);
 }
@@ -302,7 +592,7 @@ button:hover {
 .emergency-guidance {
     margin-top: 1rem;
     padding: 1.5rem;
-    background: rgba(254, 226, 226, 0.8);
+    background: rgba(255, 240, 240, 0.8);
     border-radius: 0.5rem;
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(5px);
@@ -319,32 +609,37 @@ button:hover {
 
 .do-not-do {
     margin-top: 1rem;
-    color: var(--danger-color);
+    color: #DAA520;  /* Golden brown */
 }
 
 .location-error {
-    color: var(--warning-color);
+    color: #DAA520;  /* Golden brown */
     margin-top: 1rem;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 240, 0.8);
     border-radius: 0.5rem;
     border: 1px solid var(--glass-border);
 }
 
 .loading-spinner {
     display: none;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-top: 3px solid var(--primary-color);
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(218, 165, 32, 0.3);
+    border-top: 3px solid #DAA520;  /* Golden brown */
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spinBanana 1s linear infinite, bananaGlow 2s ease-in-out infinite;
     margin-right: 10px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8,10 C8,5 11,4 14,5 C17,6 18,10 17,15 C16,20 13,21 10,20 C7,19 6,15 8,10Z' fill='%23FFD700'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+@keyframes spinBanana {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
 }
 
 .button-content {
@@ -363,11 +658,223 @@ button:disabled {
 .loading-text {
     display: none;
     text-align: center;
-    color: var(--primary-color);
+    color: #DAA520;  /* Golden brown */
     margin-top: 1rem;
     font-weight: 500;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 240, 0.8);
     border-radius: 0.5rem;
     border: 1px solid var(--glass-border);
+}
+
+/* Add banana bunch decoration */
+.banana-bunch {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.8;
+    animation: enhancedFloating 10s ease-in-out infinite, bananaGlow 4s ease-in-out infinite;
+}
+
+.banana-bunch::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M30,40 C30,20 45,15 60,20 C75,25 80,40 75,60 C70,80 55,85 40,80 C25,75 20,60 30,40Z' fill='%23FFD700'/%3E%3Cpath d='M40,30 C40,10 55,5 70,10 C85,15 90,30 85,50 C80,70 65,75 50,70 C35,65 30,50 40,30Z' fill='%23FFD700' transform='translate(-10, 10)'/%3E%3Cpath d='M20,50 C20,30 35,25 50,30 C65,35 70,50 65,70 C60,90 45,95 30,90 C15,85 10,70 20,50Z' fill='%23FFD700' transform='translate(10, -5)'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* Add banana bunch clusters */
+.banana-cluster {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.7;
+    animation: floatingCluster 8s ease-in-out infinite;
+}
+
+@keyframes floatingCluster {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    50% { transform: translate(-10px, -15px) rotate(5deg) scale(1.05); }
+    100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+}
+
+.banana-cluster::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M30,40 C30,20 45,15 60,20 C75,25 80,40 75,60 C70,80 55,85 40,80 C25,75 20,60 30,40Z' fill='%23FFD700'/%3E%3Cpath d='M50,30 C50,10 65,5 80,10 C95,15 100,30 95,50 C90,70 75,75 60,70 C45,65 40,50 50,30Z' fill='%23FFD700' transform='translate(20, 20)'/%3E%3Cpath d='M40,50 C40,30 55,25 70,30 C85,35 90,50 85,70 C80,90 65,95 50,90 C35,85 30,70 40,50Z' fill='%23FFD700' transform='translate(-20, 20)'/%3E%3Cpath d='M45,35 C45,15 60,10 75,15 C90,20 95,35 90,55 C85,75 70,80 55,75 C40,70 35,55 45,35Z' fill='%23FFD700' transform='translate(0, 40)'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* Add floating banana particles */
+.banana-particle {
+    position: fixed;
+    pointer-events: none;
+    width: 30px;
+    height: 30px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8,10 C8,5 11,4 14,5 C17,6 18,10 17,15 C16,20 13,21 10,20 C7,19 6,15 8,10Z' fill='%23FFD700'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    animation: floatingParticle 10s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes floatingParticle {
+    0% { transform: translate(0, 100vh) rotate(0deg); }
+    100% { transform: translate(0, -100vh) rotate(360deg); }
+}
+
+/* Add sparkle effect for bananas */
+@keyframes bananaSparkle {
+    0%, 100% { background-position: 0% 0%; opacity: 0; }
+    50% { background-position: 100% 100%; opacity: 1; }
+}
+
+/* Add banana ripple effect on click */
+@keyframes bananaRipple {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+}
+
+.banana-ripple {
+    position: absolute;
+    border: 2px solid #FFD700;
+    border-radius: 50%;
+    animation: bananaRipple 1s ease-out forwards;
+    pointer-events: none;
+}
+
+/* Add rainbow trail to banana clusters */
+.banana-cluster::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+    filter: blur(20px);
+    opacity: 0.3;
+    animation: rainbowTrail 3s ease-in-out infinite;
+}
+
+@keyframes rainbowTrail {
+    0% { transform: rotate(0deg) scale(0.8); opacity: 0.2; }
+    50% { transform: rotate(180deg) scale(1.2); opacity: 0.4; }
+    100% { transform: rotate(360deg) scale(0.8); opacity: 0.2; }
+}
+
+/* Add banana pulse effect to facility items */
+.facility-item:hover::before {
+    animation: bananaPulse 1s ease-in-out infinite;
+}
+
+@keyframes bananaPulse {
+    0% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+    100% { opacity: 0.5; transform: scale(1); }
+}
+
+/* Add banana glow effect */
+@keyframes bananaGlow {
+    0% { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5)); }
+    50% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)); }
+    100% { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5)); }
+}
+
+/* Add banana trail effect */
+@keyframes bananaTrail {
+    0% { transform: scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: scale(0.2) rotate(360deg); opacity: 0; }
+}
+
+/* Enhanced floating bananas animation */
+@keyframes enhancedFloating {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    25% { transform: translate(10px, -15px) rotate(15deg) scale(1.1); }
+    50% { transform: translate(0, -25px) rotate(0deg) scale(1); }
+    75% { transform: translate(-10px, -15px) rotate(-15deg) scale(1.1); }
+    100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+}
+
+/* Add sparkle effect for bananas */
+@keyframes bananaSparkle {
+    0%, 100% { background-position: 0% 0%; opacity: 0; }
+    50% { background-position: 100% 100%; opacity: 1; }
+}
+
+/* Enhanced button hover effect */
+button:hover::before {
+    content: '🍌';
+    position: absolute;
+    animation: bananaTrail 0.8s ease-out infinite;
+}
+
+/* Add banana ripple effect on click */
+@keyframes bananaRipple {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+}
+
+.banana-ripple {
+    position: absolute;
+    border: 2px solid #FFD700;
+    border-radius: 50%;
+    animation: bananaRipple 1s ease-out forwards;
+    pointer-events: none;
+}
+
+/* Enhanced banana bunch animation */
+.banana-bunch {
+    animation: enhancedFloating 10s ease-in-out infinite, bananaGlow 4s ease-in-out infinite;
+    opacity: 0.8;
+}
+
+/* Add rainbow trail to banana clusters */
+.banana-cluster::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+    filter: blur(20px);
+    opacity: 0.3;
+    animation: rainbowTrail 3s ease-in-out infinite;
+}
+
+@keyframes rainbowTrail {
+    0% { transform: rotate(0deg) scale(0.8); opacity: 0.2; }
+    50% { transform: rotate(180deg) scale(1.2); opacity: 0.4; }
+    100% { transform: rotate(360deg) scale(0.8); opacity: 0.2; }
+}
+
+/* Add banana pulse effect to facility items */
+.facility-item:hover::before {
+    animation: bananaPulse 1s ease-in-out infinite;
+}
+
+@keyframes bananaPulse {
+    0% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+    100% { opacity: 0.5; transform: scale(1); }
+}
+
+/* Make loading spinner more banana-themed */
+.loading-spinner {
+    animation: spinBanana 1s linear infinite, bananaGlow 2s ease-in-out infinite;
+    width: 40px;
+    height: 40px;
+}
+
+@keyframes spinBanana {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
 } 

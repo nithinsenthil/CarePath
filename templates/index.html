@@ -3,15 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CarePath - Symptom-to-Care Navigator</title>
+    <title>🍌 CarePath - Symptom-to-Care Navigator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
+        <!-- Corner bananas -->
+        <div class="banana-decoration top-right"></div>
+        <div class="banana-decoration bottom-left"></div>
+        <div class="banana-decoration top-left"></div>
+        <div class="banana-decoration bottom-right"></div>
+        
+        <!-- Banana bunches -->
+        <div class="banana-bunch" style="top: 30%; right: -50px;"></div>
+        <div class="banana-bunch" style="bottom: 20%; left: -50px;"></div>
+        
+        <!-- New Banana Clusters -->
+        <div class="banana-cluster" style="top: 40%; right: -80px;"></div>
+        <div class="banana-cluster" style="bottom: 30%; left: -80px;"></div>
+        
+        <!-- Background pattern -->
+        <div class="banana-pattern"></div>
+        
         <header>
-            <h1>CarePath</h1>
-            <h2>A Symptom-to-Care Navigator</h2>
+            <h1>🍌 CarePath</h1>
+            <h2>Symptom-to-Care Navigator</h2>
             <p class="description">Describe your symptoms in plain English and get recommendations for appropriate medical care.</p>
         </header>
         
@@ -20,17 +37,17 @@
             <button onclick="analyzeSymptoms()" id="analyze-button">
                 <div class="button-content">
                     <div class="loading-spinner" id="loading-spinner"></div>
-                    <span>Analyze Symptoms</span>
+                    <span>🍌 Analyze Symptoms</span>
                 </div>
             </button>
-            <p id="loading-text" class="loading-text">Analyzing symptoms and finding nearby facilities...</p>
+            <p id="loading-text" class="loading-text">🍌 Analyzing symptoms and finding nearby facilities...</p>
             <p id="location-error" class="location-error" style="display: none;">
-                Location access is required for finding nearby medical facilities. Please enable location services.
+                🍌 Location access is required for finding nearby medical facilities. Please enable location services.
             </p>
         </div>
         
         <div id="results" class="results">
-            <h2>Analysis Results</h2>
+            <h2>🍌 Analysis Results</h2>
             <div id="urgency" class="urgency"></div>
             <div id="symptoms-list"></div>
             <div id="facilities" class="facilities-list"></div>
@@ -209,6 +226,87 @@
                 setLoadingState(false);
             }
         }
+
+        // Add floating banana particles
+        function createBananaParticles() {
+            const numParticles = 15;
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'banana-particle';
+                
+                // Random starting position
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.animationDelay = `${Math.random() * 10}s`;
+                
+                document.body.appendChild(particle);
+                
+                // Remove particle after animation
+                setTimeout(() => particle.remove(), 10000);
+            }
+        }
+
+        // Create banana ripple effect
+        function createBananaRipple(event) {
+            const ripple = document.createElement('div');
+            ripple.className = 'banana-ripple';
+            
+            // Position ripple at click location
+            ripple.style.left = `${event.clientX}px`;
+            ripple.style.top = `${event.clientY}px`;
+            
+            document.body.appendChild(ripple);
+            
+            // Remove ripple after animation
+            setTimeout(() => ripple.remove(), 1000);
+        }
+
+        // Add click event listener for ripple effect
+        document.addEventListener('click', createBananaRipple);
+
+        // Start creating banana particles periodically
+        setInterval(createBananaParticles, 5000);
+        createBananaParticles(); // Initial particles
+
+        // Enhanced confetti effect
+        function createEnhancedBananaConfetti() {
+            for (let i = 0; i < 30; i++) {
+                const banana = document.createElement('div');
+                banana.className = 'banana-confetti';
+                document.body.appendChild(banana);
+
+                // Random position and rotation
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                banana.style.left = x + 'px';
+                banana.style.top = y + 'px';
+
+                // Random animation properties with enhanced range
+                banana.style.setProperty('--x', `${(Math.random() - 0.5) * 300}px`);
+                banana.style.setProperty('--y', `${Math.random() * 300 + 100}px`);
+                banana.style.setProperty('--r', `${Math.random() * 720 - 360}deg`); // More rotation
+                banana.style.setProperty('--s', `${0.5 + Math.random() * 1}`); // Random scale
+
+                // Animate with glow effect
+                banana.style.animation = 'bananaConfetti 1.5s ease-out forwards, bananaGlow 1s ease-in-out infinite';
+                setTimeout(() => banana.remove(), 1500);
+            }
+        }
+
+        // Replace original confetti with enhanced version
+        window.addEventListener('load', createEnhancedBananaConfetti);
+        document.getElementById('analyze-button').addEventListener('click', () => {
+            setTimeout(createEnhancedBananaConfetti, 100);
+        });
+
+        // Add hover effect to facility items
+        document.querySelectorAll('.facility-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'banana-sparkle';
+                item.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 1000);
+            });
+        });
     </script>
 </body>
 </html> 
